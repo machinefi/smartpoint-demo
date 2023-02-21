@@ -4,11 +4,13 @@ import { observer, useLocalObservable } from "mobx-react-lite";
 import axios from "axios";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
+import { ConnectButton } from "@rainbow-me/rainbowkit";
+import { useAccount } from "wagmi";
 
 function Test() {
   const router = useRouter();
   const store = useLocalObservable(() => ({
-    user: "0xdc04F179e51a3CE2CB89aa78fdf0469378FCe033",
+    user: "",
     token: "",
     async mintNFT() {
       try {
@@ -32,16 +34,29 @@ function Test() {
     store.token = router.query.token as string;
   }, [router]);
 
+  const { address } = useAccount();
+
+  useEffect(() => {
+    if (address) {
+      store.user = address;
+    } else {
+      store.user = "";
+    }
+  }, [address]);
   return (
     <div className={styles.container}>
-      <div>
-        Wallet Address:
-        <input
-          value={store.user}
-          onChange={(e) => (store.user = e.target.value)}
-        ></input>
+      <div style={{ marginBottom: "16px" }}>
+        <ConnectButton />
       </div>
-      <div>Token: {store.token}</div>
+
+      <div style={{ marginBottom: "16px" }}>Wallet Address:</div>
+      <input
+        value={store.user}
+        onChange={(e) => (store.user = e.target.value)}
+        style={{ marginBottom: "16px", width: "500px" }}
+        readOnly
+      ></input>
+      <div style={{ marginBottom: "16px" }}>Token: {store.token}</div>
       <button onClick={() => store.mintNFT()}>Mint NFT</button>
     </div>
   );
