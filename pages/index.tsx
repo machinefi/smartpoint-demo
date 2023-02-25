@@ -12,6 +12,7 @@ function Home() {
       store.img = res.data.data;
     },
   }));
+
   useEffect(() => {
     store.getQRCode();
   }, []);

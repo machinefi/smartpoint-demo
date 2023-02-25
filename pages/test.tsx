@@ -37,6 +37,7 @@ function Test() {
   const { address } = useAccount();
 
   useEffect(() => {
+    console.log(123);
     if (address) {
       store.user = address;
     } else {
@@ -54,7 +55,6 @@ function Test() {
         value={store.user}
         onChange={(e) => (store.user = e.target.value)}
         style={{ marginBottom: "16px", width: "500px" }}
-        readOnly
       ></input>
       <div style={{ marginBottom: "16px" }}>Token: {store.token}</div>
       <button onClick={() => store.mintNFT()}>Mint NFT</button>
